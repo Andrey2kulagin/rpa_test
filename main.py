@@ -1,12 +1,9 @@
 from driver_service import get_driver
 from selenium.webdriver.common.by import By
 import time
-from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
-from selenium.common import TimeoutException
-from selenium.webdriver import ActionChains, Keys
+from selenium.webdriver import ActionChains
 import pandas as pd
 from typing import List, Dict
 
