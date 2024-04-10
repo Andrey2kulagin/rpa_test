@@ -14,4 +14,8 @@ venv\Scripts\activate.bat
 pip install -r requirements.txt
 python main.py
 ``` 
-
+4. Для повторного запуска нужно будет активировать виртуальное окружение и запустить программу
+``` shell
+venv\Scripts\activate.bat
+python main.py
+``` 
