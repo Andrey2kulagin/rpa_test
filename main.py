@@ -6,12 +6,12 @@ from selenium.webdriver import ActionChains
 import pandas as pd
 from typing import List, Dict
 import undetected_chromedriver
-from selenium.webdriver import ChromeOptions
 import os
 import glob
 import shutil
 from selenium.common.exceptions import ElementClickInterceptedException, TimeoutException, NoSuchElementException
 import logging
+import re
 
 logging.basicConfig(filename='rpa_test.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s',
                     encoding='utf-8')
@@ -223,8 +223,26 @@ def main():
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, ".message2"))
         )
-        print(result.text)
-        logging.info(f'Результат работы программы: {result.text}')
+        result_text = result.text
+        match = re.match(r'Your success rate is (\d+)% \( (\d+) out of (\d+) fields\) in (\d+) milliseconds',
+                         result_text)
+        if match:
+            success_rate = int(match.group(1))
+            success_count = int(match.group(2))
+            total_fields = int(match.group(3))
+            milliseconds = int(match.group(4))
+
+            print("Процент успеха:", success_rate)
+            print("Количество правильно заполненных полей:", success_count)
+            print("Всего полей:", total_fields)
+            print("Затраченное время:", milliseconds)
+            logging.info(f"Процент успеха: {success_rate}")
+            logging.info(f"Количество правильно заполненных полей: {success_count}")
+            logging.info(f"Всего полей: {total_fields}")
+            logging.info(f"Затраченное время: {milliseconds}")
+        else:
+            print(result_text)
+            logging.info(f'Результат работы программы: {result.text}')
     except TimeoutException:
         logging.error('Результат работы программы не найден, работа прекращена')
         print(ERROR_TEXT)
@@ -234,6 +252,7 @@ def main():
         logging.info(f"Файл {data_filename} успешно удалён.")
     else:
         logging.info(f"Файл {data_filename} не существует.")
+    driver.quit()
 
 
 if __name__ == "__main__":
